@@ -19,41 +19,40 @@ P
 ## PROGRAM - ARP
 ```
 import socket
-from datetime import datetime
- 
-s=socket.socket()
- 
-s.bind(('localhost',8000))
- 
-s.listen(5) c,addr=s.accept()
-print("Client Address : ",addr)
- 
-now = datetime.now()
- 
-c.send(now.strftime("%d/%m/%Y %H:%M:%S").encode())
-ack=c.recv(1024).decode()
- 
-if ack:
-    print(ack)
- 
-    c.close()
-```
+s=socket.socket() 
+s.bind(('localhost',8000)) 
+s.listen(5)
+c,addr=s.accept()
+address={"165.165.80.80":"6A:08:AA:C2","165.165.79.1":"8A:BC:E3:FA"};
+while True: 
+            ip=c.recv(1024).decode()
+            try: 
+                c.send(address[ip].encode())
+            except KeyError: 
+                c.send("Not Found".encode())
+```  
+
 
 ## OUPUT - ARP
-![Screenshot 2025-03-20 214000](https://github.com/user-attachments/assets/fad1586e-40f5-4270-b568-fb400311a4db)
+![Screenshot 2025-03-21 111620](https://github.com/user-attachments/assets/adf963ca-e6b6-4e8a-81ab-04a8610b9de4)
+
 
 ## PROGRAM - RARP
 ```
-import socket 
+import socket
 s=socket.socket() 
-s.connect(('localhost',8000)) 
-print(s.getsockname()) 
-print(s.recv(1024).decode()) 
-s.send("acknowledgement recived from the server".encode())
+s.connect(('localhost',8000))
+while True: 
+    ip=input("Enter logical Address : ")
+    s.send(ip.encode())
+    print("MAC Address",s.recv(1024).decode())
 ```
+ 
+
 
 ## OUPUT -RARP
-![Screenshot 2025-03-20 214011](https://github.com/user-attachments/assets/e9685592-2edd-491f-8c26-283834a7d59b)
+![Screenshot 2025-03-21 111629](https://github.com/user-attachments/assets/b120c9e6-9014-4eae-a78d-ed0827762c77)
+
 
 ## RESULT
 Thus, the python program for simulating ARP protocols using TCP was successfully 
